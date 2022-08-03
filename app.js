@@ -36,3 +36,28 @@ async function wikiApiCall(searchInput) {
     loader.style.display = "none";
   }
 }
+
+function createCards(data) {
+  if (!data.length) {
+    errorMsg.textContent = "Wopsy, aucun résultat";
+    loader.style.display = "none";
+    return;
+  }
+  data.forEach((el) => {
+    const url = `https://en.wikipedia.org/?curid=${el.pageid}`;
+    const card = document.createElement("div");
+    card.className = "result-item";
+    card.innerHTML = `
+          <h3 class="result-title">
+          <a href=${url} target="_blank">${el.title}</a>
+          </h3>
+          <a href=${url} class="result-link" target="_blank">${url}</a>
+          <span class="result-snippet">${el.snippet}</span>
+          <br>
+          `;
+    resultsDisplay.appendChild(card);
+  });
+  loader.style.display = "none";
+}
+
+// API ENDPOINT : `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&origin=*&srlimit=20&srsearch=${searchInput}`
